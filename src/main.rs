@@ -1,10 +1,20 @@
-use std::{io::stdin, process::Command};
+use std::{
+    io::{stdin, stdout, Write},
+    process::Command,
+};
 
 fn main() {
-    let mut input = String::new();
-    stdin().read_line(&mut input).unwrap();
+    loop {
+        print!("> ");
+        stdout().flush();
+        let mut input = String::new();
+        stdin().read_line(&mut input).unwrap();
 
-    let command = input.trim();
+        let mut parts = input.trim().split_whitespace();
+        let command = parts.next().unwrap();
+        let args = parts;
 
-    Command::new(command).spawn().unwrap();
+        let mut child = Command::new(command).args(args).spawn().unwrap();
+        child.wait();
+    }
 }
